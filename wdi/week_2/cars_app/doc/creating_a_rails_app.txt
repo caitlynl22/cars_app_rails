@@ -1,0 +1,81 @@
+Creating a Rails App
+
+- Generate a new Rails app (called cars_app) with a PostgreSQL database by running the command,
+
+rails new cars_app --database=postgresql
+
+- Navigate to the cars_app directory and open it in your text editor
+
+- Create a database by running,
+
+rake db:create
+
+- Start Rails on port 3000 by running
+
+rails server
+
+- Navigate to http://localhost:3000 in your browser to check if your Rails app is running (you'll see the welcome page)
+
+- Open the config/routes.rb file and add the following:
+
+get 'cars', to: 'cars#index'
+
+     This creates a route (for the Rails router) to the cars controller that matches the HTTP request's /cars resource path.
+
+- Create a cars controller by running the command
+
+touch app/controllers/cars_controller.rb
+
+- In cars_controller.rb, write the following code:
+
+class CarsController < ApplicationController
+
+  def index
+  end
+
+end
+
+(We're creating the CarsController class, which inherits from ApplicationController)
+
+
+- Create a view: make a cars directory in app/views. In this directory, create a file named index.html.erb and enter any text (for now). Check it by navigating to http://localhost:3000/cars in your browser.
+
+- Populate the database with cars: create a Rails migration that will generate a file that will be used to create a cars table. Run the following two commands:
+
+rails generate migration CreateCars make model year
+
+rake db:migrate
+
+- Next, create a model to access the data in the cars table. Run the command touch app/models/car.rb
+
+- In the model file (car.rb), write the following:
+
+class Car < ActiveRecord::Base
+
+end
+
+(We're creating the Car class, which inherits from ActiveRecord::Base)
+
+- Create cars in the database (10, to be exact). In db/seeds.rb, enter:
+
+1.upto(10) do |num|
+  Car.create(make: "Make_#{num}", model: "Model_#{num}", year: "Year_#{num}")
+end
+
+- Run the command,
+
+rake db:seed
+
+- In the controller, retrieve all of the cars from the database by adding @cars = Car.all in the file's index method
+
+- In the index.html.erb file, enter the following to populate the view with your cars!
+
+<h2>Cars</h2>
+  <ul>
+   <% @cars.each do |car| %>
+    <li><%= car.make %>, <%= car.model %>, <%= car.year %></li>
+    <% end %>
+  </ul>
+
+- Now you can access your cars app by going back to http://localhost:3000/cars
+
